@@ -4,10 +4,18 @@ import html from 'remark-html';
 
 export async function generateStaticParams() {
   const paths = getAllPostSlugs();
-  return paths;
+  return paths.map((path) => ({
+    slug: path.params.slug,
+  }));
 }
 
-export default async function Post({ params }) {
+interface PageProps {
+  params: {
+    slug: string;
+  };
+}
+
+export default async function Post({ params }: PageProps) {
   const post = getPostData(params.slug);
   const processedContent = await remark()
     .use(html)
